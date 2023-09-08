@@ -74,6 +74,11 @@
           "LABEL": "E-postadresse",
           "PLACEHOLDER": "Skriv inn en agent sin e-postadresse"
         },
+        "AGENT_AVAILABILITY": {
+          "LABEL": "Tilgjengelighet",
+          "PLACEHOLDER": "Please select an availability status",
+          "ERROR": "Availability is required"
+        },
         "SUBMIT": "Rediger agent"
       },
       "BUTTON_TEXT": "Rediger",
@@ -91,6 +96,24 @@
     },
     "SEARCH": {
       "NO_RESULTS": "No results found."
+    },
+    "MULTI_SELECTOR": {
+      "PLACEHOLDER": "None",
+      "TITLE": {
+        "AGENT": "Select agent",
+        "TEAM": "Select team"
+      },
+      "SEARCH": {
+        "NO_RESULTS": {
+          "AGENT": "Ingen agenter funnet",
+          "TEAM": "No teams found"
+        },
+        "PLACEHOLDER": {
+          "AGENT": "Search agents",
+          "TEAM": "Search teams",
+          "INPUT": "Search for agents"
+        }
+      }
     }
   }
 }

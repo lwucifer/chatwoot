@@ -2,8 +2,11 @@ const path = require('path');
 const { API_HOST, WEBSOCKET_URL, HOST_URL, WEBSITE_INBOX_TOKEN } = process.env
 
 module.exports = {
-  publicPath: '/app/',
-  outputDir: 'dist/app',
+  devServer: {
+    proxy: 'https://chatwoot.thgdx.vn/'
+  },
+  publicPath: '/',
+  outputDir: 'dist',
   pages: {
     index: {
       entry: 'src/packs/application.js',
@@ -86,9 +89,12 @@ module.exports = {
     },
     output: {
       filename: chunkData => chunkData.chunk.name === 'sdk' ? 'js/[name].js' : 'js/[name]-[hash].js',
+    },
+    devServer: {
+      proxy: 'https://chatwoot.thgdx.vn/'
     }
   },
   chainWebpack: config => {
     config.optimization.delete('splitChunks')
-  }
+  },
 }

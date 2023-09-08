@@ -48,7 +48,7 @@ The basic config is of the format shown below.
 
 ```js
 window.chatwootConfig = {
-  hostURL: 'http://localhost:8080',
+  hostURL: 'http://localhost:3000',
   fbAppId: '',
   signupEnabled: true,
   enabledLanguages: [

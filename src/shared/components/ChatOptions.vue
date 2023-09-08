@@ -1,8 +1,11 @@
 <template>
-  <div class="options-message chat-bubble agent">
+  <div class="options-message chat-bubble agent bg-white dark:bg-slate-700">
     <div class="card-body">
-      <h4 class="title">
-        {{ title }}
+      <h4 class="title text-black-900 dark:text-slate-50">
+        <div
+          v-dompurify-html="formatMessage(title, false)"
+          class="message-content text-black-900 dark:text-slate-50"
+        />
       </h4>
       <ul
         v-if="!hideFields"
@@ -23,11 +26,13 @@
 
 <script>
 import ChatOption from 'shared/components/ChatOption';
+import messageFormatterMixin from 'shared/mixins/messageFormatterMixin';
 
 export default {
   components: {
     ChatOption,
   },
+  mixins: [messageFormatterMixin],
   props: {
     title: {
       type: String,
@@ -80,7 +85,6 @@ export default {
     font-weight: $font-weight-normal;
     margin-top: $space-smaller;
     margin-bottom: $space-smaller;
-    color: $color-heading;
     line-height: 1.5;
   }
 

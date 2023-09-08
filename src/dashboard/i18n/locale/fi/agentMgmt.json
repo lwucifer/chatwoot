@@ -74,6 +74,11 @@
           "LABEL": "Sähköpostiosoite",
           "PLACEHOLDER": "Ole hyvä ja kirjoita edustajan sähköpostiosoite"
         },
+        "AGENT_AVAILABILITY": {
+          "LABEL": "Saatavuus",
+          "PLACEHOLDER": "Please select an availability status",
+          "ERROR": "Availability is required"
+        },
         "SUBMIT": "Muokkaa edustajaa"
       },
       "BUTTON_TEXT": "Muokkaa",
@@ -91,6 +96,24 @@
     },
     "SEARCH": {
       "NO_RESULTS": "No results found."
+    },
+    "MULTI_SELECTOR": {
+      "PLACEHOLDER": "None",
+      "TITLE": {
+        "AGENT": "Select agent",
+        "TEAM": "Select team"
+      },
+      "SEARCH": {
+        "NO_RESULTS": {
+          "AGENT": "Edustajia ei löytynyt",
+          "TEAM": "No teams found"
+        },
+        "PLACEHOLDER": {
+          "AGENT": "Search agents",
+          "TEAM": "Search teams",
+          "INPUT": "Search for agents"
+        }
+      }
     }
   }
 }

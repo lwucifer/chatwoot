@@ -1,9 +1,15 @@
 <template>
   <form @submit.prevent="onSubmit">
     <div class="merge-contacts">
-      <div class="multiselect-wrap--small">
+      <div class="multiselect-wrap--medium">
         <label class="multiselect__label">
           {{ $t('MERGE_CONTACTS.PRIMARY.TITLE') }}
+          <woot-label
+            :title="$t('MERGE_CONTACTS.PRIMARY.HELP_LABEL')"
+            color-scheme="success"
+            small
+            class="label--merge-warning"
+          />
         </label>
         <multiselect
           :value="primaryContact"
@@ -17,6 +23,9 @@
             <contact-dropdown-item
               :thumbnail="props.option.thumbnail"
               :name="props.option.name"
+              :identifier="props.option.id"
+              :email="props.option.email"
+              :phone-number="props.option.phoneNumber"
             />
           </template>
         </multiselect>
@@ -24,14 +33,20 @@
 
       <div class="child-contact-wrap">
         <div class="child-arrow">
-          <i class="ion-ios-arrow-up up" />
+          <fluent-icon icon="arrow-up" class="up" size="17" />
         </div>
         <div
-          class="child-contact multiselect-wrap--small"
+          class="child-contact multiselect-wrap--medium"
           :class="{ error: $v.childContact.$error }"
         >
           <label class="multiselect__label">
-            {{ $t('MERGE_CONTACTS.CHILD.TITLE') }}
+            {{ $t('MERGE_CONTACTS.CHILD.TITLE')
+            }}<woot-label
+              :title="$t('MERGE_CONTACTS.CHILD.HELP_LABEL')"
+              color-scheme="alert"
+              small
+              class="label--merge-warning"
+            />
           </label>
           <multiselect
             v-model="childContact"
@@ -51,7 +66,19 @@
             <template slot="singleLabel" slot-scope="props">
               <contact-dropdown-item
                 :thumbnail="props.option.thumbnail"
+                :identifier="props.option.id"
                 :name="props.option.name"
+                :email="props.option.email"
+                :phone-number="props.option.phone_number"
+              />
+            </template>
+            <template slot="option" slot-scope="props">
+              <contact-dropdown-item
+                :thumbnail="props.option.thumbnail"
+                :identifier="props.option.id"
+                :name="props.option.name"
+                :email="props.option.email"
+                :phone-number="props.option.phone_number"
               />
             </template>
             <span slot="noResult">
@@ -146,64 +173,52 @@ export default {
 
 <style lang="scss" scoped>
 .child-contact-wrap {
-  display: flex;
-  width: 100%;
+  @apply flex w-full;
 }
 .child-contact {
-  flex: 1 0 0;
-  min-width: 0;
+  @apply min-w-0 flex-grow flex-shrink-0;
 }
 .child-arrow {
-  width: var(--space-larger);
-  position: relative;
-  font-size: var(--font-size-default);
-  color: var(--color-border-dark);
+  @apply w-8 relative text-base text-slate-100 dark:text-slate-600;
 }
 .multiselect {
-  margin-bottom: var(--space-small);
+  @apply mb-2;
 }
 .child-contact {
-  margin-top: var(--space-smaller);
+  @apply mt-1;
 }
 .child-arrow::after {
-  content: '';
-  height: var(--space-larger);
-  width: 0;
-  left: var(--space-two);
-  position: absolute;
-  border-left: 1px solid var(--color-border-dark);
+  @apply content-[''] h-12 w-0 left-5 absolute border-l border-solid border-slate-100 dark:border-slate-600;
 }
 
 .child-arrow::before {
-  content: '';
-  height: 0;
-  width: var(--space-normal);
-  left: var(--space-two);
-  top: var(--space-larger);
-  position: absolute;
-  border-bottom: 1px solid var(--color-border-dark);
+  @apply content-[''] h-0 w-4 left-5 top-12 absolute border-b border-solid border-slate-100 dark:border-slate-600;
 }
 
 .up {
-  position: absolute;
-  top: -11px;
-  left: var(--space-normal);
-}
-
-::v-deep .multiselect__tags .option__title {
-  display: inline-flex;
-  align-items: center;
-  margin-left: var(--space-small);
+  @apply absolute -top-1 left-3;
 }
 
 .footer {
-  margin-top: var(--space-medium);
-  display: flex;
-  justify-content: flex-end;
+  @apply mt-6 flex justify-end;
 }
 
 /* TDOD: Clean errors in forms style */
 .error .message {
-  margin-top: 0;
+  @apply mt-0;
+}
+
+.label--merge-warning {
+  @apply ml-2;
+}
+
+::v-deep {
+  .multiselect {
+    @apply rounded-md;
+  }
+
+  .multiselect__tags {
+    @apply h-[52px];
+  }
 }
 </style>

@@ -1,5 +1,7 @@
 <template>
-  <div class="view-box columns bg-light">
+  <div
+    class="flex flex-1 h-full justify-between flex-col m-0 bg-slate-25 dark:bg-slate-900"
+  >
     <settings-header
       button-route="new"
       :icon="icon"
@@ -8,10 +10,12 @@
       :show-back-button="showBackButton"
       :back-url="backUrl"
       :show-new-button="showNewButton"
+      :show-sidemenu-icon="showSidemenuIcon"
     />
-    <keep-alive>
-      <router-view></router-view>
+    <keep-alive v-if="keepAlive">
+      <router-view />
     </keep-alive>
+    <router-view v-else />
   </div>
 </template>
 
@@ -24,9 +28,13 @@ export default {
     SettingsHeader,
   },
   props: {
-    headerTitle: String,
-    headerButtonText: String,
-    icon: String,
+    headerTitle: { type: String, default: '' },
+    headerButtonText: { type: String, default: '' },
+    icon: { type: String, default: '' },
+    keepAlive: {
+      type: Boolean,
+      default: true,
+    },
     newButtonRoutes: {
       type: Array,
       default: () => [],
@@ -38,6 +46,10 @@ export default {
     backUrl: {
       type: [String, Object],
       default: '',
+    },
+    showSidemenuIcon: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {

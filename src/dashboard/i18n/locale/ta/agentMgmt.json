@@ -74,6 +74,11 @@
           "LABEL": "ஈ-மெயில் முகவரி",
           "PLACEHOLDER": "ஏஜெண்டின் ஈ-மெயில் முகவரியை உள்ளிடவும்"
         },
+        "AGENT_AVAILABILITY": {
+          "LABEL": "Availability",
+          "PLACEHOLDER": "Please select an availability status",
+          "ERROR": "Availability is required"
+        },
         "SUBMIT": "ஏஜெண்டில் திருத்து"
       },
       "BUTTON_TEXT": "திருத்து",
@@ -91,6 +96,24 @@
     },
     "SEARCH": {
       "NO_RESULTS": "No results found."
+    },
+    "MULTI_SELECTOR": {
+      "PLACEHOLDER": "None",
+      "TITLE": {
+        "AGENT": "Select agent",
+        "TEAM": "Select team"
+      },
+      "SEARCH": {
+        "NO_RESULTS": {
+          "AGENT": "No agents found",
+          "TEAM": "No teams found"
+        },
+        "PLACEHOLDER": {
+          "AGENT": "Search agents",
+          "TEAM": "Search teams",
+          "INPUT": "Search for agents"
+        }
+      }
     }
   }
 }

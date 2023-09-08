@@ -3,6 +3,7 @@ import Vue from 'vue';
 import * as MutationHelpers from 'shared/helpers/vuex/mutationHelpers';
 import * as types from '../mutation-types';
 import IntegrationsAPI from '../../api/integrations';
+import { throwErrorMessage } from 'dashboard/store/utils/api';
 
 const state = {
   records: [],
@@ -13,17 +14,23 @@ const state = {
     isUpdating: false,
     isCreatingHook: false,
     isDeletingHook: false,
+    isCreatingSlack: false,
+    isUpdatingSlack: false,
+    isFetchingSlackChannels: false,
   },
 };
 
+const isAValidAppIntegration = integration => {
+  return ['dialogflow', 'dyte', 'google_translate', 'openai'].includes(
+    integration.id
+  );
+};
 export const getters = {
   getIntegrations($state) {
-    return $state.records.filter(
-      item => item.id !== 'fullcontact' && item.id !== 'dialogflow'
-    );
+    return $state.records.filter(item => !isAValidAppIntegration(item));
   },
   getAppIntegrations($state) {
-    return $state.records.filter(item => item.id === 'dialogflow');
+    return $state.records.filter(item => isAValidAppIntegration(item));
   },
   getIntegration: $state => integrationId => {
     const [integration] = $state.records.filter(
@@ -49,14 +56,44 @@ export const actions = {
   },
 
   connectSlack: async ({ commit }, code) => {
-    commit(types.default.SET_INTEGRATIONS_UI_FLAG, { isUpdating: true });
+    commit(types.default.SET_INTEGRATIONS_UI_FLAG, { isCreatingSlack: true });
     try {
       const response = await IntegrationsAPI.connectSlack(code);
       commit(types.default.ADD_INTEGRATION, response.data);
-      commit(types.default.SET_INTEGRATIONS_UI_FLAG, { isUpdating: false });
     } catch (error) {
-      commit(types.default.SET_INTEGRATIONS_UI_FLAG, { isUpdating: false });
+      throwErrorMessage(error);
+    } finally {
+      commit(types.default.SET_INTEGRATIONS_UI_FLAG, {
+        isCreatingSlack: false,
+      });
     }
+  },
+  updateSlack: async ({ commit }, slackObj) => {
+    commit(types.default.SET_INTEGRATIONS_UI_FLAG, { isUpdatingSlack: true });
+    try {
+      const response = await IntegrationsAPI.updateSlack(slackObj);
+      commit(types.default.ADD_INTEGRATION, response.data);
+    } catch (error) {
+      throwErrorMessage(error);
+    } finally {
+      commit(types.default.SET_INTEGRATIONS_UI_FLAG, {
+        isUpdatingSlack: false,
+      });
+    }
+  },
+  listAllSlackChannels: async ({ commit }) => {
+    commit(types.default.SET_INTEGRATIONS_UI_FLAG, {
+      isFetchingSlackChannels: true,
+    });
+    try {
+      const response = await IntegrationsAPI.listAllSlackChannels();
+      return response.data;
+    } catch (error) {
+      commit(types.default.SET_INTEGRATIONS_UI_FLAG, {
+        isFetchingSlackChannels: false,
+      });
+    }
+    return null;
   },
 
   deleteIntegration: async ({ commit }, integrationId) => {
@@ -70,6 +107,17 @@ export const actions = {
       commit(types.default.SET_INTEGRATIONS_UI_FLAG, { isDeleting: false });
     } catch (error) {
       commit(types.default.SET_INTEGRATIONS_UI_FLAG, { isDeleting: false });
+    }
+  },
+  showHook: async ({ commit }, hookId) => {
+    commit(types.default.SET_INTEGRATIONS_UI_FLAG, { isFetchingItem: true });
+    try {
+      const response = await IntegrationsAPI.showHook(hookId);
+      commit(types.default.ADD_INTEGRATION_HOOKS, response.data);
+      commit(types.default.SET_INTEGRATIONS_UI_FLAG, { isFetchingItem: false });
+    } catch (error) {
+      commit(types.default.SET_INTEGRATIONS_UI_FLAG, { isFetchingItem: false });
+      throw new Error(error);
     }
   },
   createHook: async ({ commit }, hookData) => {

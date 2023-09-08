@@ -19,9 +19,9 @@
       "NAME": {
         "LABEL": "Nome da etiqueta",
         "PLACEHOLDER": "Nome da etiqueta",
-        "REQUIRED_ERROR": "Label name is required",
-        "MINIMUM_LENGTH_ERROR": "Minimum length 2 is required",
-        "VALID_ERROR": "Only Alphabets, Numbers, Hyphen and Underscore are allowed"
+        "REQUIRED_ERROR": "O nome da etiqueta é obrigatório",
+        "MINIMUM_LENGTH_ERROR": "O tamanho mínimo obrigatório é 2",
+        "VALID_ERROR": "Apenas são permitidos Alfabetos, Números, Hífen e Underscores"
       },
       "DESCRIPTION": {
         "LABEL": "Descrição",
@@ -37,6 +37,19 @@
       "CREATE": "Criar",
       "DELETE": "excluir",
       "CANCEL": "cancelar"
+    },
+    "SUGGESTIONS": {
+      "TOOLTIP": {
+        "SINGLE_SUGGESTION": "Adicionar etiqueta à conversa",
+        "MULTIPLE_SUGGESTION": "Selecione esta etiqueta",
+        "DESELECT": "Desmarcar etiqueta",
+        "DISMISS": "Descartar sugestão"
+      },
+      "POWERED_BY": "Chatwoot IA",
+      "DISMISS": "Descartar",
+      "ADD_SELECTED_LABELS": "Adicionar etiquetas selecionadas",
+      "ADD_SELECTED_LABEL": "Adicionar etiqueta selecionada",
+      "ADD_ALL_LABELS": "Adicionar todas as etiquetas"
     },
     "ADD": {
       "TITLE": "Adicionar Etiqueta",

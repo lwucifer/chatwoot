@@ -74,6 +74,11 @@
           "LABEL": "Alamat email",
           "PLACEHOLDER": "Silakan masukkan alamat email agen"
         },
+        "AGENT_AVAILABILITY": {
+          "LABEL": "Ketersediaan",
+          "PLACEHOLDER": "Pilih status ketersediaan",
+          "ERROR": "Ketersediaan diperlukan"
+        },
         "SUBMIT": "Edit Agen"
       },
       "BUTTON_TEXT": "Edit",
@@ -91,6 +96,24 @@
     },
     "SEARCH": {
       "NO_RESULTS": "Tidak ada hasil ditemukan."
+    },
+    "MULTI_SELECTOR": {
+      "PLACEHOLDER": "Tidak ada",
+      "TITLE": {
+        "AGENT": "Pilih Agen",
+        "TEAM": "Pilih tim"
+      },
+      "SEARCH": {
+        "NO_RESULTS": {
+          "AGENT": "Tidak ada agen",
+          "TEAM": "Tidak ada tim ditemukan"
+        },
+        "PLACEHOLDER": {
+          "AGENT": "Mencari Agen",
+          "TEAM": "Mencari tim",
+          "INPUT": "Mencari Agen"
+        }
+      }
     }
   }
 }

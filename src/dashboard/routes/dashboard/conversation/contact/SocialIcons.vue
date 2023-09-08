@@ -1,14 +1,17 @@
 <template>
-  <div v-if="availableProfiles.length" class="social--icons">
+  <div v-if="availableProfiles.length" class="flex items-end mx-0 my-2 gap-3">
     <a
       v-for="profile in availableProfiles"
       :key="profile.key"
       :href="`${profile.link}${socialProfiles[profile.key]}`"
       target="_blank"
       rel="noopener noreferrer nofollow"
-      class="contact--social-icon"
     >
-      <i :class="`ion-social-${profile.icon}`" />
+      <fluent-icon
+        :icon="`brand-${profile.key}`"
+        size="16"
+        class="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+      />
     </a>
   </div>
 </template>
@@ -28,6 +31,7 @@ export default {
         { key: 'twitter', icon: 'twitter', link: 'https://twitter.com/' },
         { key: 'linkedin', icon: 'linkedin', link: 'https://linkedin.com/' },
         { key: 'github', icon: 'github', link: 'https://github.com/' },
+        { key: 'instagram', icon: 'instagram', link: 'https://instagram.com/' },
       ],
     };
   },
@@ -40,14 +44,3 @@ export default {
   },
 };
 </script>
-
-<style scoped lang="scss">
-.social--icons {
-  margin-bottom: var(--space-small);
-}
-.contact--social-icon {
-  font-size: var(--font-size-medium);
-  padding-right: var(--space-slab);
-  color: var(--color-body);
-}
-</style>

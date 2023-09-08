@@ -74,6 +74,11 @@
           "LABEL": "Endereço de email",
           "PLACEHOLDER": "Por favor, insira um endereço de e-mail do agente"
         },
+        "AGENT_AVAILABILITY": {
+          "LABEL": "Disponibilidade",
+          "PLACEHOLDER": "Por favor, selecione a disponibilidade do agente",
+          "ERROR": "A disponibilidade é necessária"
+        },
         "SUBMIT": "Editar agente"
       },
       "BUTTON_TEXT": "Alterar",
@@ -91,6 +96,24 @@
     },
     "SEARCH": {
       "NO_RESULTS": "Nenhum resultado encontrado."
+    },
+    "MULTI_SELECTOR": {
+      "PLACEHOLDER": "Nenhuma",
+      "TITLE": {
+        "AGENT": "Selecionar agente",
+        "TEAM": "Selecionar time"
+      },
+      "SEARCH": {
+        "NO_RESULTS": {
+          "AGENT": "Nenhum agente encontrado",
+          "TEAM": "Nenhum time encontrado"
+        },
+        "PLACEHOLDER": {
+          "AGENT": "Pesquisar agentes",
+          "TEAM": "Pesquisar times",
+          "INPUT": "Pesquisar por agentes"
+        }
+      }
     }
   }
 }

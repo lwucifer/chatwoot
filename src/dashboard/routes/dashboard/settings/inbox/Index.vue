@@ -1,9 +1,12 @@
 <template>
-  <div class="column content-box">
+  <div class="flex-1 overflow-auto p-4">
     <!-- List Canned Response -->
-    <div class="row">
-      <div class="small-8 columns with-right-space ">
-        <p v-if="!inboxesList.length" class="no-items-error-message">
+    <div class="flex flex-row gap-4">
+      <div class="w-[60%]">
+        <p
+          v-if="!inboxesList.length"
+          class="flex h-full items-center flex-col justify-center"
+        >
           {{ $t('INBOX_MGMT.LIST.404') }}
           <router-link
             v-if="isAdmin"
@@ -43,11 +46,21 @@
                   Twitter
                 </span>
                 <span v-if="item.channel_type === 'Channel::TwilioSms'">
-                  Twilio SMS
+                  {{ twilioChannelName(item) }}
+                </span>
+                <span v-if="item.channel_type === 'Channel::Whatsapp'">
+                  Whatsapp
+                </span>
+                <span v-if="item.channel_type === 'Channel::Sms'">
+                  Sms
                 </span>
                 <span v-if="item.channel_type === 'Channel::Email'">
                   Email
                 </span>
+                <span v-if="item.channel_type === 'Channel::Telegram'">
+                  Telegram
+                </span>
+                <span v-if="item.channel_type === 'Channel::Line'">Line</span>
                 <span v-if="item.channel_type === 'Channel::Api'">
                   {{ globalConfig.apiChannelName || 'API' }}
                 </span>
@@ -61,26 +74,26 @@
                   >
                     <woot-button
                       v-if="isAdmin"
-                      icon="ion-gear-b"
-                      variant="link"
+                      v-tooltip.top="$t('INBOX_MGMT.SETTINGS')"
+                      variant="smooth"
+                      size="tiny"
+                      icon="settings"
                       color-scheme="secondary"
                       class-names="grey-btn"
-                    >
-                      {{ $t('INBOX_MGMT.SETTINGS') }}
-                    </woot-button>
+                    />
                   </router-link>
 
                   <woot-button
                     v-if="isAdmin"
-                    variant="link"
-                    color-scheme="secondary"
+                    v-tooltip.top="$t('INBOX_MGMT.DELETE.BUTTON_TEXT')"
+                    variant="smooth"
+                    color-scheme="alert"
+                    size="tiny"
                     class-names="grey-btn"
                     :is-loading="loading[item.id]"
-                    icon="ion-close-circled"
+                    icon="dismiss-circle"
                     @click="openDelete(item)"
-                  >
-                    {{ $t('INBOX_MGMT.DELETE.BUTTON_TEXT') }}
-                  </woot-button>
+                  />
                 </div>
               </td>
             </tr>
@@ -88,9 +101,9 @@
         </table>
       </div>
 
-      <div class="small-4 columns">
+      <div class="w-[34%]">
         <span
-          v-html="
+          v-dompurify-html="
             useInstallationName(
               $t('INBOX_MGMT.SIDEBAR_TXT'),
               globalConfig.installationName
@@ -107,6 +120,7 @@
     />
 
     <woot-confirm-delete-modal
+      v-if="showDeletePopup"
       :show.sync="showDeletePopup"
       :title="$t('INBOX_MGMT.DELETE.CONFIRM.TITLE')"
       :message="confirmDeleteMessage"
@@ -158,7 +172,7 @@ export default {
     confirmDeleteMessage() {
       return `${this.$t('INBOX_MGMT.DELETE.CONFIRM.MESSAGE')} ${
         this.selectedInbox.name
-      } ?`;
+      }?`;
     },
     confirmPlaceHolderText() {
       return `${this.$t('INBOX_MGMT.DELETE.CONFIRM.PLACE_HOLDER', {
@@ -167,6 +181,11 @@ export default {
     },
   },
   methods: {
+    twilioChannelName(item) {
+      const { medium = '' } = item;
+      if (medium === 'whatsapp') return 'WhatsApp';
+      return 'Twilio SMS';
+    },
     openSettings(inbox) {
       this.showSettings = true;
       this.selectedInbox = inbox;

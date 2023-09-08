@@ -1,15 +1,13 @@
-import compareAsc from 'date-fns/compareAsc';
-import { buildDateFromTime } from 'shared/helpers/DateHelper';
-import { mapGetters } from 'vuex';
+import { utcToZonedTime } from 'date-fns-tz';
+import { isTimeAfter } from 'shared/helpers/DateHelper';
 
 export default {
   computed: {
-    ...mapGetters({ webChannelConfig: 'appConfig/getWebChannelConfig' }),
     channelConfig() {
-      return this.webChannelConfig;
+      return window.chatwootWebChannel;
     },
     replyTime() {
-      return this.webChannelConfig.replyTime;
+      return window.chatwootWebChannel.replyTime;
     },
     replyTimeStatus() {
       switch (this.replyTime) {
@@ -23,6 +21,17 @@ export default {
           return this.$t('REPLY_TIME.IN_A_FEW_HOURS');
       }
     },
+    replyWaitMessage() {
+      const { workingHoursEnabled } = this.channelConfig;
+      if (workingHoursEnabled) {
+        return this.isOnline
+          ? this.replyTimeStatus
+          : `${this.$t('REPLY_TIME.BACK_IN')} ${this.timeLeftToBackInOnline}`;
+      }
+      return this.isOnline
+        ? this.replyTimeStatus
+        : this.$t('TEAM_AVAILABILITY.OFFLINE');
+    },
     outOfOfficeMessage() {
       return this.channelConfig.outOfOfficeMessage;
     },
@@ -33,22 +42,38 @@ export default {
         closeHour,
         closeMinute,
         closedAllDay,
+        openAllDay,
       } = this.currentDayAvailability;
+
+      if (openAllDay) {
+        return true;
+      }
+
+      if (closedAllDay) {
+        return false;
+      }
+
       const { utcOffset } = this.channelConfig;
-
-      if (closedAllDay) return false;
-
-      const startTime = buildDateFromTime(openHour, openMinute, utcOffset);
-      const endTime = buildDateFromTime(closeHour, closeMinute, utcOffset);
-      const isBetween =
-        compareAsc(new Date(), startTime) === 1 &&
-        compareAsc(endTime, new Date()) === 1;
-
-      if (isBetween) return true;
-      return false;
+      const today = this.getDateWithOffset(utcOffset);
+      const currentHours = today.getHours();
+      const currentMinutes = today.getMinutes();
+      const isAfterStartTime = isTimeAfter(
+        currentHours,
+        currentMinutes,
+        openHour,
+        openMinute
+      );
+      const isBeforeEndTime = isTimeAfter(
+        closeHour,
+        closeMinute,
+        currentHours,
+        currentMinutes
+      );
+      return isAfterStartTime && isBeforeEndTime;
     },
     currentDayAvailability() {
-      const dayOfTheWeek = new Date().getDay();
+      const { utcOffset } = this.channelConfig;
+      const dayOfTheWeek = this.getDateWithOffset(utcOffset).getDay();
       const [workingHourConfig = {}] = this.channelConfig.workingHours.filter(
         workingHour => workingHour.day_of_week === dayOfTheWeek
       );
@@ -58,7 +83,18 @@ export default {
         openMinute: workingHourConfig.open_minutes,
         closeHour: workingHourConfig.close_hour,
         closeMinute: workingHourConfig.close_minutes,
+        openAllDay: workingHourConfig.open_all_day,
       };
+    },
+    isInBusinessHours() {
+      const { workingHoursEnabled } = this.channelConfig;
+      return workingHoursEnabled ? this.isInBetweenTheWorkingHours : true;
+    },
+  },
+
+  methods: {
+    getDateWithOffset(utcOffset) {
+      return utcToZonedTime(new Date().toISOString(), utcOffset);
     },
   },
 };

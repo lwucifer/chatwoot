@@ -1,45 +1,66 @@
 <template>
-  <div class="card">
-    <textarea
-      v-model="inputText"
-      :placeholder="$t('NOTES.ADD.PLACEHOLDER')"
+  <div
+    class="flex flex-col mb-2 p-4 border border-solid border-slate-75 dark:border-slate-700 overflow-hidden rounded-md flex-grow shadow-sm bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-100"
+  >
+    <woot-message-editor
+      v-model="noteContent"
       class="input--note"
-      @keydown.enter.shift.exact="onAdd"
+      :placeholder="$t('NOTES.ADD.PLACEHOLDER')"
+      :enable-suggestions="false"
     />
-    <div class="footer">
+    <div class="flex justify-end w-full">
       <woot-button
-        size="tiny"
         color-scheme="warning"
         :title="$t('NOTES.ADD.TITLE')"
         :is-disabled="buttonDisabled"
         @click="onAdd"
       >
-        {{ $t('NOTES.ADD.BUTTON') }}
+        {{ $t('NOTES.ADD.BUTTON') }} (⌘⏎)
       </woot-button>
     </div>
   </div>
 </template>
 
 <script>
+import WootMessageEditor from 'dashboard/components/widgets/WootWriter/Editor';
+import { hasPressedCommandAndEnter } from 'shared/helpers/KeyboardHelpers';
 export default {
+  components: {
+    WootMessageEditor,
+  },
+
   data() {
     return {
-      inputText: '',
+      noteContent: '',
     };
   },
 
   computed: {
     buttonDisabled() {
-      return this.inputText === '';
+      return this.noteContent === '';
     },
   },
 
+  mounted() {
+    document.addEventListener('keydown', this.onMetaEnter);
+  },
+
+  beforeDestroy() {
+    document.removeEventListener('keydown', this.onMetaEnter);
+  },
+
   methods: {
-    onAdd() {
-      if (this.inputText !== '') {
-        this.$emit('add', this.inputText);
+    onMetaEnter(e) {
+      if (hasPressedCommandAndEnter(e)) {
+        e.preventDefault();
+        this.onAdd();
       }
-      this.inputText = '';
+    },
+    onAdd() {
+      if (this.noteContent !== '') {
+        this.$emit('add', this.noteContent);
+      }
+      this.noteContent = '';
     },
   },
 };
@@ -47,17 +68,13 @@ export default {
 
 <style lang="scss" scoped>
 .input--note {
-  font-size: var(--font-size-mini);
-  border-color: transparent;
-  margin-bottom: var(--space-small);
-  padding: 0;
-  resize: none;
-  min-height: var(--space-larger);
-}
+  &::v-deep .ProseMirror-menubar {
+    padding: 0;
+    margin-top: var(--space-minus-small);
+  }
 
-.footer {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
+  &::v-deep .ProseMirror-woot-style {
+    max-height: 22.5rem;
+  }
 }
 </style>

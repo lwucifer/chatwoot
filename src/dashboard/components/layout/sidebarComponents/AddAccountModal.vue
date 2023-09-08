@@ -2,16 +2,23 @@
   <woot-modal
     :show="show"
     :on-close="() => $emit('close-account-create-modal')"
-    class="account-selector--modal"
   >
-    <div class="column content-box">
+    <div class="h-auto overflow-auto flex flex-col">
       <woot-modal-header
         :header-title="$t('CREATE_ACCOUNT.NEW_ACCOUNT')"
         :header-content="$t('CREATE_ACCOUNT.SELECTOR_SUBTITLE')"
       />
+      <div v-if="!hasAccounts" class="text-sm mt-6 mx-8 mb-0">
+        <div class="items-center rounded-md flex alert">
+          <div class="ml-1 mr-3">
+            <fluent-icon icon="warning" />
+          </div>
+          {{ $t('CREATE_ACCOUNT.NO_ACCOUNT_WARNING') }}
+        </div>
+      </div>
 
-      <form class="row" @submit.prevent="addAccount">
-        <div class="medium-12 columns">
+      <form class="flex flex-col w-full" @submit.prevent="addAccount">
+        <div class="w-full">
           <label :class="{ error: $v.accountName.$error }">
             {{ $t('CREATE_ACCOUNT.FORM.NAME.LABEL') }}
             <input
@@ -22,8 +29,8 @@
             />
           </label>
         </div>
-        <div class="modal-footer medium-12 columns">
-          <div class="medium-12 columns">
+        <div class="w-full">
+          <div class="w-full">
             <woot-submit-button
               :disabled="
                 $v.accountName.$invalid ||
@@ -52,6 +59,10 @@ export default {
     show: {
       type: Boolean,
       default: false,
+    },
+    hasAccounts: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {

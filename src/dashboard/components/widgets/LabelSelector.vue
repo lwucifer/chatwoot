@@ -1,33 +1,29 @@
 <template>
-  <div>
-    <h6 class="text-block-title">
-      <i class="title-icon ion-pricetags" />
-      {{ $t('CONTACT_PANEL.LABELS.CONTACT.TITLE') }}
-    </h6>
-    <div v-on-clickaway="closeDropdownLabel" class="label-wrap">
-      <add-label @add="toggleLabels" />
-      <woot-label
-        v-for="label in savedLabels"
-        :key="label.id"
-        :title="label.title"
-        :description="label.description"
-        :show-close="true"
-        :bg-color="label.color"
-        @click="removeItem"
-      />
-      <div class="dropdown-wrap">
-        <div
-          :class="{ 'dropdown-pane--open': showSearchDropdownLabel }"
-          class="dropdown-pane"
-        >
-          <label-dropdown
-            v-if="showSearchDropdownLabel"
-            :account-labels="allLabels"
-            :selected-labels="selectedLabels"
-            @add="addItem"
-            @remove="removeItem"
-          />
-        </div>
+  <div v-on-clickaway="closeDropdownLabel" class="label-wrap">
+    <add-label @add="toggleLabels" />
+    <woot-label
+      v-for="label in savedLabels"
+      :key="label.id"
+      :title="label.title"
+      :description="label.description"
+      :show-close="true"
+      :color="label.color"
+      variant="smooth"
+      @click="removeItem"
+    />
+    <div class="dropdown-wrap">
+      <div
+        :class="{ 'dropdown-pane--open': showSearchDropdownLabel }"
+        class="dropdown-pane"
+      >
+        <label-dropdown
+          v-if="showSearchDropdownLabel"
+          :account-labels="allLabels"
+          :selected-labels="selectedLabels"
+          :allow-creation="isAdmin"
+          @add="addItem"
+          @remove="removeItem"
+        />
       </div>
     </div>
   </div>
@@ -35,8 +31,15 @@
 
 <script>
 import AddLabel from 'shared/components/ui/dropdown/AddLabel';
+import eventListenerMixins from 'shared/mixins/eventListenerMixins';
 import LabelDropdown from 'shared/components/ui/label/LabelDropdown';
 import { mixin as clickaway } from 'vue-clickaway';
+import adminMixin from 'dashboard/mixins/isAdmin';
+import {
+  buildHotKeys,
+  isEscape,
+  isActiveElementTypeable,
+} from 'shared/helpers/KeyboardHelpers';
 
 export default {
   components: {
@@ -44,7 +47,7 @@ export default {
     LabelDropdown,
   },
 
-  mixins: [clickaway],
+  mixins: [clickaway, adminMixin, eventListenerMixins],
 
   props: {
     allLabels: {
@@ -85,6 +88,18 @@ export default {
     closeDropdownLabel() {
       this.showSearchDropdownLabel = false;
     },
+
+    handleKeyEvents(e) {
+      const keyPattern = buildHotKeys(e);
+
+      if (keyPattern === 'l' && !isActiveElementTypeable(e)) {
+        this.toggleLabels();
+        e.preventDefault();
+      } else if (isEscape(e) && this.showSearchDropdownLabel) {
+        this.closeDropdownLabel();
+        e.preventDefault();
+      }
+    },
   },
 };
 </script>
@@ -96,7 +111,6 @@ export default {
 
 .label-wrap {
   position: relative;
-  margin-left: var(--space-two);
   line-height: var(--space-medium);
 
   .dropdown-wrap {

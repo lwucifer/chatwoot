@@ -74,6 +74,11 @@
           "LABEL": "Eメールアドレス",
           "PLACEHOLDER": "担当者のEメールアドレスを入力してください"
         },
+        "AGENT_AVAILABILITY": {
+          "LABEL": "利用可能期間",
+          "PLACEHOLDER": "Please select an availability status",
+          "ERROR": "Availability is required"
+        },
         "SUBMIT": "担当者の編集"
       },
       "BUTTON_TEXT": "編集",
@@ -90,7 +95,25 @@
       }
     },
     "SEARCH": {
-      "NO_RESULTS": "No results found."
+      "NO_RESULTS": "該当結果が見つかりませんでした。"
+    },
+    "MULTI_SELECTOR": {
+      "PLACEHOLDER": "該当なし",
+      "TITLE": {
+        "AGENT": "Select agent",
+        "TEAM": "Select team"
+      },
+      "SEARCH": {
+        "NO_RESULTS": {
+          "AGENT": "No agents found",
+          "TEAM": "No teams found"
+        },
+        "PLACEHOLDER": {
+          "AGENT": "Search agents",
+          "TEAM": "Search teams",
+          "INPUT": "Search for agents"
+        }
+      }
     }
   }
 }
